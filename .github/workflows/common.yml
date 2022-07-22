@@ -109,7 +109,7 @@ jobs:
       - name: Deploy web App using GH Action azure/webapps-deploy
         uses: azure/webapps-deploy@v2
         with:
-          app-name: ${{ steps.tfapply.outputs.AZURE_WEBAPP_NAME }}
+          app-name: ${{ jobs.build.steps.tfapply.outputs.AZURE_WEBAPP_NAME }}
           package: ./mysite
 
       - name: logout
