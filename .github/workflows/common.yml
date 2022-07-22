@@ -77,6 +77,7 @@ jobs:
             terraform plan -out theplan
 
       - name: apply terraform
+        id: tfapply
         env:
           ARM_CLIENT_ID: ${{ steps.kvAction.outputs.ARM-CLIENT-ID }}
           ARM_CLIENT_SECRET: ${{ steps.kvAction.outputs.ARM-CLIENT-SECRET }}
@@ -91,3 +92,26 @@ jobs:
             echo "starting..."
             cd terraform
             terraform apply -auto-approve theplan
+            AZURE_WEBAPP_NAME=$(terraform output app_service_name)
+            echo "::set-output name=AZURE_WEBAPP_NAME::$AZURE_WEBAPP_NAME\n"
+
+      - name: Set up Python 3.x
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.x
+
+      - name: Install dependencies
+        working-directory: ./mysite
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Deploy web App using GH Action azure/webapps-deploy
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: ${{ steps.tfapply.outputs.AZURE_WEBAPP_NAME }}
+          package: ./mysite
+
+      - name: logout
+        run: |
+          az logout

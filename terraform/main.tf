@@ -72,7 +72,7 @@ resource "azurerm_service_plan" "asp" {
   sku_name            = "B1"
 }
 
-resource "azurerm_linux_web_app" "example" {
+resource "azurerm_linux_web_app" "app" {
   name                = "${local.gh_repo}${random_string.unique.result}"
   resource_group_name = azurerm_resource_group.rg.name
   location            = azurerm_service_plan.asp.location
@@ -83,7 +83,7 @@ resource "azurerm_linux_web_app" "example" {
   }
   
   site_config {
-    application_stack = {
+    application_stack {
       python_version = 3.9
     }
   }
