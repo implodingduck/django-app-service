@@ -78,14 +78,14 @@ resource "azurerm_linux_web_app" "example" {
   location            = azurerm_service_plan.asp.location
   service_plan_id     = azurerm_service_plan.asp.id
 
-  app_settings {
+  app_settings = {
     APPINSIGHTS_INSTRUMENTATIONKEY = azurerm_application_insights.app.instrumentation_key
   }
-  application_stack {
-    python_version = 3.9
-  }
+  
   site_config {
-
+    application_stack = {
+      python_version = 3.9
+    }
   }
 
   identity{
