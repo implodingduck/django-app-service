@@ -44,6 +44,7 @@ jobs:
         uses: hashicorp/setup-terraform@v1.2.1
         with:
           terraform_version: latest
+          terraform_wrapper: false
 
       - name: Azure Login
         uses: Azure/login@v1
@@ -92,9 +93,9 @@ jobs:
             echo "starting..."
             cd terraform
             terraform apply -auto-approve theplan
-            webapp=$(terraform output -raw app_service_name)
+            webapp=$(terraform output app_service_name)
             echo $webapp
-            echo "::set-output name=webapp::$(echo $webapp)"
+            echo "::set-output name=webapp::$webapp"
 
       - name: Set up Python 3.x
         uses: actions/setup-python@v2
@@ -118,7 +119,7 @@ jobs:
       - name: Deploy web App using GH Action azure/webapps-deploy
         uses: azure/webapps-deploy@v2
         with:
-          app-name: django-app-serviceyatql4t7
+          app-name: ${{ steps.tfapply.outputs.webapp }}
           package: ./mysite.zip
 
       - name: logout
