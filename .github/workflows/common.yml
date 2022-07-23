@@ -92,8 +92,9 @@ jobs:
             echo "starting..."
             cd terraform
             terraform apply -auto-approve theplan
-            webapp=$(echo $(terraform output -raw app_service_name))
-            echo "::set-output name=webapp::$webapp"
+            webapp=$(terraform output -raw app_service_name)
+            echo $webapp
+            echo "::set-output name=webapp::$(echo $webapp)"
 
       - name: Set up Python 3.x
         uses: actions/setup-python@v2
