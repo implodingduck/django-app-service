@@ -119,7 +119,7 @@ jobs:
       - name: Deploy web App using GH Action azure/webapps-deploy
         uses: azure/webapps-deploy@v2
         with:
-          app-name: ${{ steps.tfapply.outputs.webapp }}
+          app-name: django-app-serviceyatql4t7
           package: ./mysite.zip
 
       - name: logout
