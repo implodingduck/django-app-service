@@ -110,7 +110,8 @@ jobs:
           echo "Hello!"
           echo ${{ steps.tfapply.outputs }}
           echo ${{ steps.tfapply.outputs.webapp }}
-          zip -r mysite.zip mysite
+          cd mysite
+          zip -r ../mysite.zip *
 
 
       - name: Deploy web App using GH Action azure/webapps-deploy
