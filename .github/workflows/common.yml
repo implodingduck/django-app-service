@@ -92,7 +92,7 @@ jobs:
             echo "starting..."
             cd terraform
             terraform apply -auto-approve theplan
-            webapp=$(terraform output app_service_name)
+            webapp=$(terraform output -raw app_service_name)
             echo "::set-output name=webapp::$webapp"
 
       - name: Set up Python 3.x
@@ -110,12 +110,14 @@ jobs:
           echo "Hello!"
           echo ${{ steps.tfapply.outputs }}
           echo ${{ steps.tfapply.outputs.webapp }}
+          zip -r mysite.zip mysite
+
 
       - name: Deploy web App using GH Action azure/webapps-deploy
         uses: azure/webapps-deploy@v2
         with:
           app-name: django-app-serviceyatql4t7
-          package: ./mysite
+          package: ./mysite.zip
 
       - name: logout
         run: |

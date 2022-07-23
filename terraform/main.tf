@@ -80,6 +80,7 @@ resource "azurerm_linux_web_app" "app" {
 
   app_settings = {
     APPINSIGHTS_INSTRUMENTATIONKEY = azurerm_application_insights.app.instrumentation_key
+    SCM_DO_BUILD_DURING_DEPLOYMENT = "true"
   }
   
   site_config {
