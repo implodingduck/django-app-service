@@ -92,8 +92,8 @@ jobs:
             echo "starting..."
             cd terraform
             terraform apply -auto-approve theplan
-            AZURE_WEBAPP_NAME=$(terraform output app_service_name)
-            echo "::set-output name=AZURE_WEBAPP_NAME::$AZURE_WEBAPP_NAME"
+            webapp=$(terraform output app_service_name)
+            echo "::set-output name=webapp::$webapp"
 
       - name: Set up Python 3.x
         uses: actions/setup-python@v2
@@ -109,7 +109,7 @@ jobs:
       - name: Deploy web App using GH Action azure/webapps-deploy
         uses: azure/webapps-deploy@v2
         with:
-          app-name: ${{ steps.tfapply.outputs.AZURE_WEBAPP_NAME }}
+          app-name: ${{ steps.tfapply.outputs.webapp }}
           package: ./mysite
 
       - name: logout
