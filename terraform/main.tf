@@ -145,3 +145,9 @@ resource "azurerm_mssql_firewall_rule" "azureservices" {
   start_ip_address = "0.0.0.0"
   end_ip_address   = "0.0.0.0"
 }
+
+resource "azurerm_role_assignment" "app_to_sql" {
+  scope                = azurerm_mssql_server.db.id
+  role_definition_name = "SQL DB Contributor"
+  principal_id         = azurerm_linux_web_app.app.identity.0.object_id
+}
