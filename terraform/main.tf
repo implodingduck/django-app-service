@@ -85,6 +85,8 @@ resource "azurerm_linux_web_app" "app" {
   app_settings = {
     APPINSIGHTS_INSTRUMENTATIONKEY = azurerm_application_insights.app.instrumentation_key
     SCM_DO_BUILD_DURING_DEPLOYMENT = true
+    DB_HOST                        = azurerm_mssql_server.db.fully_qualified_domain_name 
+    DB_NAME                        = azurerm_mssql_database.db.name
   }
   
   site_config {
@@ -107,4 +109,39 @@ resource "azurerm_linux_web_app" "app" {
   identity{
     type = "SystemAssigned"
   }
+}
+
+resource "azurerm_mssql_server" "db" {
+  name                         = "${local.gh_repo}${random_string.unique.result}-server"
+  resource_group_name          = azurerm_resource_group.rg.name
+  location                     = azurerm_resource_group.rg.location
+  version                      = "12.0"
+  
+  minimum_tls_version          = "1.2"
+  azuread_administrator {
+    login_username              = var.az_db_username
+    object_id                   = var.az_db_oid
+    azuread_authentication_only = true
+  }
+  tags = local.tags
+}
+
+resource "azurerm_mssql_database" "db" {
+  name                        = "${local.gh_repo}${random_string.unique.result}db"
+  server_id                   = azurerm_mssql_server.db.id
+  max_size_gb                 = 40
+  auto_pause_delay_in_minutes = -1
+  min_capacity                = 1
+  sku_name                    = "GP_S_Gen5_1"
+  tags = local.tags
+  short_term_retention_policy {
+    retention_days = 7
+  }
+}
+
+resource "azurerm_mssql_firewall_rule" "azureservices" {
+  name             = "azureservices"
+  server_id        = azurerm_mssql_server.db.id
+  start_ip_address = "0.0.0.0"
+  end_ip_address   = "0.0.0.0"
 }
