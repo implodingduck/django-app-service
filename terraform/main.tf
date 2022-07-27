@@ -87,6 +87,7 @@ resource "azurerm_linux_web_app" "app" {
     SCM_DO_BUILD_DURING_DEPLOYMENT = true
     DB_HOST                        = azurerm_mssql_server.db.fully_qualified_domain_name 
     DB_NAME                        = azurerm_mssql_database.db.name
+    AZURE_CLIENT_ID                = azurerm_user_assigned_identity.uai.principal_id
   }
   
   site_config {
