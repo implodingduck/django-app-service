@@ -109,7 +109,7 @@ resource "azurerm_linux_web_app" "app" {
   identity{
     type = "UserAssigned"
     identity_ids = [
-      azurerm_user_assigned_identity.uai.principal_id
+      azurerm_user_assigned_identity.uai.id
     ]
   }
 }
