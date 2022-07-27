@@ -107,7 +107,10 @@ resource "azurerm_linux_web_app" "app" {
   }
 
   identity{
-    type = "SystemAssigned"
+    type = "UserAssigned"
+    identity_ids = [
+      azurerm_user_assigned_identity.uai.principal_id
+    ]
   }
 }
 
@@ -146,8 +149,16 @@ resource "azurerm_mssql_firewall_rule" "azureservices" {
   end_ip_address   = "0.0.0.0"
 }
 
+resource "azurerm_user_assigned_identity" "uai" {
+  resource_group_name = azurerm_resource_group.rg.name
+  location            = azurerm_resource_group.rg.location
+
+  name = "uai-django-sql"
+}
+
 resource "azurerm_role_assignment" "app_to_sql" {
   scope                = azurerm_mssql_server.db.id
   role_definition_name = "SQL DB Contributor"
-  principal_id         = azurerm_linux_web_app.app.identity.0.principal_id
+  #principal_id         = azurerm_linux_web_app.app.identity.0.principal_id
+  principal_id = azurerm_user_assigned_identity.uai.principal_id
 }
