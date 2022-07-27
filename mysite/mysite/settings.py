@@ -78,7 +78,7 @@ DATABASES = {
         'ENGINE': 'mssql',
         "NAME": os.environ["DB_NAME"],
         "HOST": os.environ["DB_HOST"],
-        "USER": os.environ["AZURE_CLIENT_ID"],
+        "USER": os.environ["AZURE_PRINCIPAL_ID"],
         "PORT": "1433",
         "OPTIONS": {
             "driver": "ODBC Driver 17 for SQL Server",
