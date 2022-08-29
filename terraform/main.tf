@@ -90,7 +90,7 @@ resource "azurerm_linux_web_app" "app" {
     AZURE_CLIENT_ID                = azurerm_user_assigned_identity.uai.client_id
     AZURE_TENANT_ID                = azurerm_user_assigned_identity.uai.tenant_id
     AZURE_PRINCIPAL_ID             = azurerm_user_assigned_identity.uai.principal_id
-    POST_DEPLOYMENT_COMMAND        = "postbuild.sh"
+    POST_BUILD_COMMAND        = "postbuild.sh"
   }
   
   site_config {
