@@ -1,7 +1,7 @@
 #!/bin/bash
 echo "-====-"
 echo "Migrating DB..."
-python manage migrate
+python manage.py migrate
 echo "Migration done..."
 echo "-====-"
 echo "Starting gunicorn..."
