@@ -90,10 +90,11 @@ resource "azurerm_linux_web_app" "app" {
     AZURE_CLIENT_ID                = azurerm_user_assigned_identity.uai.client_id
     AZURE_TENANT_ID                = azurerm_user_assigned_identity.uai.tenant_id
     AZURE_PRINCIPAL_ID             = azurerm_user_assigned_identity.uai.principal_id
-    POST_BUILD_SCRIPT_PATH         = "postbuild.sh"
+    #POST_BUILD_SCRIPT_PATH         = "postbuild.sh"
   }
   
   site_config {
+    app_command_line = "customstartup.sh"
     application_stack {
       python_version = 3.9
     }
